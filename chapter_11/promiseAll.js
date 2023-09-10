@@ -1,6 +1,31 @@
 function Promise_all(promises) {
   return new Promise((resolve, reject) => {
-    
+    let results = [];
+    if (promises.length == 0) {
+      resolve(results);
+    }
+
+    for (val of promises) {
+      results = results.concat(false);
+    }
+    for (let i = 0; i < promises.length; i++) {
+      promises[i].then(value => {
+        results[i] = value;
+
+        let done = false;
+        for (let i = 0; i < promises.length; i++) {
+          if (results[i] == false) {
+            break;
+          } else if (i == promises.length-1) {
+            done = true;
+          }
+        }
+
+        if (done) {
+          resolve(results);
+        }
+      }).catch(err => reject(err));
+    }
   });
 }
 

@@ -7,16 +7,21 @@ function soon(val) {
 const promiseArray = [soon(1), soon(2)];
 const resultArray = [false, false];
 
-let finished = false;
+let done = false;
 
-while(!finished) {
-  for (let i = 0; i < resultArray.length; i++) {
-    if(resultArray[i] === false) {
-      break;
-    } else {
-      promiseArray[i].then(result => resultArray[i] = result);
-    }
-  }
-  finished = true;
+for (let i = 0; i < promiseArray.length; i++) {
+  promiseArray[i].then(value => {
+    resultArray[i] = value;
+  });
 }
 
+console.log(resultArray);
+
+setTimeout(() => console.log(resultArray) ,1000);
+
+for (let i = 0;; i++) {
+  console.log("run-to-completion " + i);
+  if (i == 2000000) {
+    break;
+  }
+}
