@@ -14,6 +14,9 @@ function parseExpression(program) {
 }
 
 function skipSpace(string) {
+  let commentRegex = /#.*\n/g;
+  string = string.replaceAll(commentRegex, "\n");
+
   let first = string.search(/\S/);
   if (first == -1) return "";
   return string.slice(first);
@@ -234,3 +237,11 @@ do(define(f, fun(a, fun(b, +(a, b)))),
    print(f(4)(5)))
 `);
 // → 9
+
+console.log(parse("# hello\nx"));
+// → {type: "word", name: "x"}
+
+console.log(parse("a # one\n   # two\n()"));
+// → {type: "apply",
+//    operator: {type: "word", name: "a"},
+//    args: []}
