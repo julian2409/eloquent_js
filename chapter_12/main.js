@@ -192,11 +192,30 @@ run(`
 
 // Modify these definitions...
 
-topScope.array = "...";
+topScope.array = (...args) => {
+  const values = [];
+  let count = args.length;
+  while(count > 0) {
+    values.unshift(args[count-1]);
+    count--;
+  }
 
-topScope.length = "...";
+  return values;
+};
 
-topScope.element = "...";
+topScope.length = (array) => {
+  if(Object.prototype.toString.call(array) !== '[object Array]') {
+    throw new SyntaxError(`${array} is not an array`);
+  }
+  return array.length;
+};
+
+topScope.element = (array, index) => {
+  if(Object.prototype.toString.call(array) !== '[object Array]') {
+    throw new SyntaxError(`${array} is not an array`);
+  }
+  return array[index];
+};
 
 run(`
 do(define(sum, fun(array,
