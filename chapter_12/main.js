@@ -1,3 +1,5 @@
+"use strict";
+
 function parseExpression(program) {
   program = skipSpace(program);
   let match, expr;
@@ -248,13 +250,28 @@ console.log(parse("a # one\n   # two\n()"));
 
 console.log("----------------------------------------------");
 
+class ReferenceError extends Error {};
+
 specialForms.set = (args, scope) => {
-  if (!Object.prototype.hasOwnProperty.call(scope, args[1].name)) {
-  	throw new Error(`Referenc Error`);
+  console.log("Args: " + JSON.stringify(args));
+  console.log("Inner scope: " + JSON.stringify(scope));
+
+  let currentScope = scope;
+
+  // Check if scope has binding
+  const bindingFound = Object.prototype.hasOwnProperty.call(scope, args[1].name);
+
+  if (bindingFound) {
+    console.log("Binding has been found");
+    // Overwrite value with something like
+    // scope[args[1].name] = args[0].value;
   }
 
-  console.log(JSON.stringify(args));
-  console.log(JSON.stringify(scope));
+  // This gets the outer scope. If it is null the outermost scope is reached.
+  const outerScope = Object.getPrototypeOf(scope);
+
+  // If outerScope == null throw new ReferenceError
+  console.log("No binding has been found"); // throw new ReferenceError(`ReferenceError: ${args[1].name} is not defined`);
 };
 
 run(`
