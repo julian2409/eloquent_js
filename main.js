@@ -1,11 +1,13 @@
-let someText = 
-  `This is some text with
-linebreaks and
-# pseudocomments in it.
-It needs a few more lines and ## comments
-to be usefull for testing
-stuff.`
+"use strict";
 
-let regex = /#.*\n/g;
+const myObject = Object.create(null);
 
-console.log(someText.replaceAll(regex, "\n"));
+myObject.testValue = 5;
+
+console.log(myObject.testValue);
+
+myObject["testValue"] = 6;
+
+console.log(Object.prototype.hasOwnProperty.call(myObject, "testValue"));
+
+console.log(myObject.testValue);

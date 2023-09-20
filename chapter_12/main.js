@@ -250,28 +250,24 @@ console.log(parse("a # one\n   # two\n()"));
 
 console.log("----------------------------------------------");
 
-class ReferenceError extends Error {};
-
 specialForms.set = (args, scope) => {
-  console.log("Args: " + JSON.stringify(args));
-  console.log("Inner scope: " + JSON.stringify(scope));
-
+  let bindingFound = false;
   let currentScope = scope;
 
-  // Check if scope has binding
-  const bindingFound = Object.prototype.hasOwnProperty.call(scope, args[1].name);
+  while (!bindingFound) {
+    bindingFound = Object.prototype.hasOwnProperty.call(currentScope, args[0].name);
 
-  if (bindingFound) {
-    console.log("Binding has been found");
-    // Overwrite value with something like
-    // scope[args[1].name] = args[0].value;
+    if (bindingFound) {
+      currentScope[args[0].name] = evaluate(args[1], scope);
+      return;
+    }
+
+    if (JSON.stringify(currentScope) == "{}") {
+      throw new ReferenceError(`ReferenceError: ${args[0].name} is not defined`);
+    }
+
+    currentScope = Object.getPrototypeOf(currentScope);
   }
-
-  // This gets the outer scope. If it is null the outermost scope is reached.
-  const outerScope = Object.getPrototypeOf(scope);
-
-  // If outerScope == null throw new ReferenceError
-  console.log("No binding has been found"); // throw new ReferenceError(`ReferenceError: ${args[1].name} is not defined`);
 };
 
 run(`

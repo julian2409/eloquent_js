@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/chapter_11/main.js",
+            "program": "${workspaceFolder}/chapter_12/main.js",
             "runtimeExecutable": "/home/julian/.nvm/versions/node/v18.17.0/bin/node",
         }
     ]
