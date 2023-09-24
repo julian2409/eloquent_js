@@ -10,8 +10,24 @@
 
 <body>
   <h1>Hello World!</h1>
-  <p><style> h1 { color: blue; } </style>Some paragraph which contains some <strong>strong</strong> text.
+  <p>
+    <style>
+      h1 {
+        color: blue;
+      }
+    </style>Some paragraph which contains some <strong>strong</strong> text.
   </p>
+
+  <p style="border: 3px solid red"> I'm boxed in
+  </p>
+  <script>
+    let para = document.body.getElementsByTagName("p")[0]; console.log("clientHeight:", para.clientHeight); console.log("offsetHeight:", para.offsetHeight);
+  </script>
+  <div>
+    <p style="text-align: center; margin-top: 2rem;">
+      <img src="./assets/cat.png" style="position: relative">
+    </p>
+  </div>
 </body>
 
 </html>
