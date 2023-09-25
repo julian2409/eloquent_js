@@ -12,5 +12,17 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
   const tableDiv = document.getElementById("mountains");
-  
+
+  const table = document.createElement("table");
+  const tableHeaderRow = document.createElement("tr");
+  const tableHeaderName = document.createElement("th");
+  const tableHeaderHeight = document.createElement("th");
+  const tableHeaderPlace = document.createElement("th");
+
+  tableHeaderRow.appendChild(tableHeaderName);
+  tableHeaderRow.appendChild(tableHeaderHeight);
+  tableHeaderRow.appendChild(tableHeaderPlace);
+  table.appendChild(tableHeaderRow);
+
+  tableDiv.appendChild(table);
 });
