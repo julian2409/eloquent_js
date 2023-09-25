@@ -1,22 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
 
-<h1>Heading with a <span>span</span> element.</h1>
-<p>A paragraph with <span>one</span>, <span>two</span>
-  spans.</p>
+<head>
+  <meta charset="utf-8" />
+  <title>Eloquent Javascript</title>
+  <!-- <script src="./main.js"></script> -->
+  <link rel="icon" href="../html.ico">
+</head>
 
-<script>
-  function byTagName(node, tagName) {
-    const tagElements = [];
+<body>
 
-    const nodeChildElements = node.childNodes.filter(node => node.nodeType == Node.ELEMENT_NODE);
-    
-  }
+  <h1>Heading with a <span>span</span> element.</h1>
+  <p>A paragraph with <span>one</span>, <span>two</span>
+    spans.</p>
 
-  console.log(byTagName(document.body, "h1").length);
-  // → 1
-  console.log(byTagName(document.body, "span").length);
-  // → 3
-  let para = document.querySelector("p");
-  console.log(byTagName(para, "span").length);
-  // → 2
-</script>
+  <script>
+    function byTagName(node, tagName) {
+      let tagElements = [];
+      const nodeChildElements = Array.from(node.childNodes).filter(node => node.nodeType == Node.ELEMENT_NODE);
+      for (let childNode of nodeChildElements) {
+        if (childNode.nodeName.toLowerCase() == tagName) {
+          tagElements.push(childNode);
+        }
+        if (Array.from(childNode.childNodes).length > 0) {
+          tagElements = tagElements.concat(byTagName(childNode, tagName));
+        }
+      }
+
+      return tagElements;
+    }
+
+    console.log(byTagName(document.body, "h1").length);
+    // → 1
+    console.log(byTagName(document.body, "span").length);
+    // → 3
+    let para = document.querySelector("p");
+    console.log(byTagName(para, "span").length);
+    // → 2
+  </script>
+</body>
+
+</html>
