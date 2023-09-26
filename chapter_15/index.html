@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Eloquent Javascript</title>
+  <script src="./main.js"></script>
+  <link rel="icon" href="../html.ico">
+</head>
+
+<body>
+  <h1>Hello World!</h1>
+  <!-- <p>Click this document to activate the handler.</p>
+  <script>
+    window.addEventListener("click", () => {
+      console.log("You knocked?");
+    });
+  </script> -->
+
+  <button>Click me</button>
+  <p>No handler here.</p>
+  <script>
+    let button = document.querySelector("button");
+    button.addEventListener("click", () => {
+      console.log("Button clicked.");
+    });
+  </script>
+
+  <button id="button2">Act-once button</button>
+  <script>
+    let button2 = document.querySelector("#button2");
+    function once() {
+      console.log("Done.");
+      button2.removeEventListener("click", once);
+    }
+    button2.addEventListener("click", once);
+  </script>
+
+  <button id="button3">Click me any way you want</button>
+  <script>
+    let button3 = document.querySelector("#button3");
+    button3.addEventListener("mousedown", event => {
+      if (event.button == 0) {
+        console.log("Left button");
+      } else if (event.button == 1) {
+        console.log("Middle button");
+      } else if (event.button == 2) {
+        console.log("Right button");
+      }
+    });
+  </script>
+
+  <a href="https://developer.mozilla.org/">MDN</a>
+  <script>
+    let link = document.querySelector("a");
+    link.addEventListener("click", event => {
+      console.log("Nope.");
+      event.preventDefault();
+    });
+  </script>
+
+  <p>This page turns violet when you hold the V key.</p>
+  <script>
+    window.addEventListener("keydown", event => {
+      if (event.key == "v") {
+        document.body.style.background = "violet";
+      }
+    });
+    window.addEventListener("keyup", event => {
+      if (event.key == "v") {
+        document.body.style.background = "";
+      }
+    });
+  </script>
+
+  <p>Press Control-Space to continue.</p>
+  <script>
+    window.addEventListener("keydown", event => {
+      if (event.key == " " && event.ctrlKey) {
+        console.log("Continuing!");
+      }
+    });
+  </script>
+</body>
+
+</html>
