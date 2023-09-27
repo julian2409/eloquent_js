@@ -1,0 +1,9 @@
+body {
+  background: lightgreen;
+}
+
+.balloon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
