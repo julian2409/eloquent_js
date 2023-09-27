@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Eloquent Javascript</title>
+  <script src="./main.js"></script>
+  <link rel="icon" href="../html.ico">
+</head>
+
+<body>
+  <h1>Hello World!</h1>
+  <script>
+    let squareWorker = new Worker("./squareworker.js");
+    squareWorker.addEventListener("message", event => {
+      console.log("The worker responded:", event.data);
+    });
+    squareWorker.postMessage(10);
+    squareWorker.postMessage(24);
+  </script>
+</body>
+
+</html>

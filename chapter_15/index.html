@@ -48,6 +48,10 @@
         console.log("Right button");
       }
     });
+
+    button3.addEventListener("mouseup", event => {
+      console.log("Now the mouse has come up again.This can only happen while still hovering over the key.");
+    });
   </script>
 
   <a href="https://developer.mozilla.org/">MDN</a>
@@ -78,6 +82,14 @@
     window.addEventListener("keydown", event => {
       if (event.key == " " && event.ctrlKey) {
         console.log("Continuing!");
+      }
+    });
+  </script>
+
+  <script>
+    document.body.addEventListener("click", event => {
+      if (event.target.nodeName == "BUTTON") {
+        console.log("Clicked", event.target.textContent);
       }
     });
   </script>
