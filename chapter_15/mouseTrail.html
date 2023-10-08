@@ -25,8 +25,53 @@
   </style>
 
   <script>
-    // Your code here.
+    "use strict";
+
+    const body = document.getElementsByTagName("body")[0];
+    let trailElements = new Array(10).fill(null);
+
+    for (let item of trailElements) {
+      const trailElement = document.createElement("div");
+      trailElement.classList.add("trail");
+      body.appendChild(trailElement);
+    }
+
+    trailElements = Array.from(document.getElementsByClassName("trail"));
+
+    let currentElement = 0;
+    let scheduled = null;
+
+    function setNextMouseTrail(event) {
+      if (!scheduled) {
+        setTimeout(() => {
+          const mouseX = scheduled.pageX;
+          const mouseY = scheduled.pageY;
+
+          if (currentElement >= trailElements.length) {
+            currentElement = 0;
+          }
+
+          trailElements[currentElement].style.top = mouseY + "px";
+          trailElements[currentElement].style.left = mouseX + "px";
+
+          console.log(`Mouse at: ${mouseX}|${mouseY}`);
+          scheduled = null;
+
+          currentElement++;
+        }, 50);
+      }
+      scheduled = event;
+    }
+
+    document.addEventListener("mousemove", setNextMouseTrail);
   </script>
 </body>
 
 </html>
+
+<!-- () => {
+  const trailElement = document.createElement("div");
+  trailElement.classList.add("trail");
+
+  return trailElement;
+} -->
