@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Eloquent Javascript</title>
+  <link rel="icon" href="../html.ico">
+</head>
+
+<body>
+
+  <tab-panel>
+    <div data-tabname="one">Tab one</div>
+    <div data-tabname="two">Tab two</div>
+    <div data-tabname="three">Tab three</div>
+  </tab-panel>
+  <script>
+    function asTabs(node) {
+      const buttonContainer = document.createElement("div");
+      buttonContainer.style.display = "flex";
+      node.style.display = "flex";
+      node.style.flexDirection = "column";
+
+      const button1 = document.createElement("button");
+      button1.style.float = "left";
+      button1.innerText = document.getElementsByTagName("div")[0].innerText;
+      const button2 = document.createElement("button");
+      button2.style.float = "left";
+      button2.innerText = document.getElementsByTagName("div")[1].innerText;
+      const button3 = document.createElement("button");
+      button3.style.float = "left";
+      button3.innerText = document.getElementsByTagName("div")[2].innerText;
+
+      const tabPanel = document.querySelector("tab-panel");
+      tabPanel.prepend(buttonContainer);
+
+      buttonContainer.appendChild(button1);
+      buttonContainer.appendChild(button2);
+      buttonContainer.appendChild(button3);
+
+      const tabs = Array.from(document.getElementsByTagName("div"));
+
+
+      tabs[1].style.display = "flex";
+      tabs[2].style.display = "none";
+      tabs[3].style.display = "none";
+
+      function clickHandler(event) {
+        if (event.target.innerText == "Tab one") {
+          tabs[1].style.display = "flex";
+          tabs[2].style.display = "none";
+          tabs[3].style.display = "none";
+        } else if (event.target.innerText == "Tab two") {
+          tabs[1].style.display = "none";
+          tabs[2].style.display = "flex";
+          tabs[3].style.display = "none";
+        } else {
+          tabs[1].style.display = "none";
+          tabs[2].style.display = "none";
+          tabs[3].style.display = "flex";
+        }
+
+
+        event.target.style.display = "flex";
+      }
+
+      button1.onclick = clickHandler;
+      button2.onclick = clickHandler;
+      button3.onclick = clickHandler;
+    }
+    asTabs(document.querySelector("tab-panel"));
+  </script>
+
+</body>
