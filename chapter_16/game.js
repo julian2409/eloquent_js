@@ -1,5 +1,7 @@
 "use strict";
 
+let remainingLives = 3;
+
 let simpleLevelPlan = `
 ......................
 ..#................#..
@@ -38,6 +40,7 @@ class State {
     this.status = status;
   }
   static start(level) {
+    console.log(remainingLives);
     return new State(level, level.startActors, "playing");
   }
   get player() {
@@ -370,7 +373,15 @@ function runLevel(level, Display) {
 async function runGame(plans, Display) {
   for (let level = 0; level < plans.length; ) {
     let status = await runLevel(new Level(plans[level]), Display);
-    if (status == "won") level++;
+    if (status == "won") {
+      level++;
+    } else {
+      remainingLives--;
+    }
+    if (remainingLives < 0) {
+      level = 0;
+      remainingLives = 3;
+    }
   }
   console.log("You've won!");
 }
