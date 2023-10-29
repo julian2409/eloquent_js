@@ -320,20 +320,26 @@ Player.prototype.update = function (time, state, keys) {
   return new Player(pos, new Vec(xSpeed, ySpeed));
 };
 
-function trackKeys(keys) {
-  let down = Object.create(null);
+function trackKeys(keys, disable) {let down = Object.create(null);
   function track(event) {
     if (keys.includes(event.key)) {
       down[event.key] = event.type == "keydown";
       event.preventDefault();
     }
   }
+
+  down.unregisterHandlers = () => {
+    window.removeEventListener("keydown", track);
+    window.removeEventListener("keyup", track);
+    console.log("Keys disabled");
+  }
+
   window.addEventListener("keydown", track);
   window.addEventListener("keyup", track);
+
+  console.log("Keys enabled");
   return down;
 }
-
-const arrowKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp"]);
 
 function runAnimation(frameFunc) {
   let lastTime = null;
@@ -349,9 +355,11 @@ function runAnimation(frameFunc) {
 }
 
 function runLevel(level, Display) {
+  const arrowKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp"]);
+
   let display = new Display(document.body, level);
   let state = State.start(level);
-  let ending = 1;
+  let ending = 2;
   let paused = false;
 
   function pauseGame(event) {
@@ -376,6 +384,7 @@ function runLevel(level, Display) {
       if (state.status == "playing") {
         return true;
       } else if (ending > 0) {
+        arrowKeys.unregisterHandlers();
         window.removeEventListener("keydown", pauseGame);
         ending -= time;
         return true;
