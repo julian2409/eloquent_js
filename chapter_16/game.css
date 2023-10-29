@@ -9,6 +9,9 @@
 .lava {
   background: rgb(255, 100, 100);
 }
+.monster {
+  background: greenyellow;
+}
 .wall {
   background: white;
 }

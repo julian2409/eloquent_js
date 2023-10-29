@@ -98,6 +98,20 @@ class Lava {
 
 Lava.prototype.size = new Vec(1, 1);
 
+class Monster {
+  constructor(pos, speed) {
+    this.pos = pos;
+    this.speed = speed;
+  }
+  get type() {
+    return "monster";
+  }
+  static create(pos) {
+    return new Monster(pos, new Vec(2, 0));
+  }
+}
+Monster.prototype.size = new Vec(1, 1);
+
 class Coin {
   constructor(pos, basePos, wobble) {
     this.pos = pos;
@@ -124,6 +138,7 @@ const levelChars = {
   "=": Lava,
   "|": Lava,
   v: Lava,
+  "m": Monster,
 };
 
 function elt(name, attrs, ...children) {
@@ -260,6 +275,24 @@ function overlap(actor1, actor2) {
   );
 }
 
+Monster.prototype.collide = function(state) {
+  console.log("Touched monster");
+  let player = state.actors.filter((actor) => actor.type == "player");
+  let monster = state.actors.filter((actor) => actor == this);
+  console.log(JSON.stringify(player));
+  console.log(JSON.stringify(monster));
+
+  const heightDiff = monster[0].pos.y - player[0].pos.y;
+  console.log(heightDiff);
+
+  if (heightDiff > 1.3) {
+    const filtered = state.actors.filter((actor) => actor != this);
+    return new State(state.level, filtered, state.status);
+  }
+  
+  return new State(state.level, state.actors, "lost");
+}
+
 Lava.prototype.collide = function (state) {
   return new State(state.level, state.actors, "lost");
 };
@@ -281,6 +314,15 @@ Lava.prototype.update = function (time, state) {
     return new Lava(this.pos, this.speed.times(-1));
   }
 };
+
+Monster.prototype.update = function (time, state) {
+  let newPos = this.pos.plus(this.speed.times(time));
+  if (!state.level.touches(newPos, this.size, "wall")) {
+    return new Monster(newPos, this.speed, this.reset);
+  } else {
+    return new Monster(this.pos, this.speed.times(-1));
+  }
+}
 
 const wobbleSpeed = 8;
 const wobbleDist = 0.07;
