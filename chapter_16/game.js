@@ -352,16 +352,35 @@ function runLevel(level, Display) {
   let display = new Display(document.body, level);
   let state = State.start(level);
   let ending = 1;
+  let paused = false;
+
+  function pauseGame(event) {
+    if (event.key !== "Escape") return;
+    paused = !paused;
+    console.log("Game is paused " + paused);
+    if (paused) {
+      state.status = "paused";
+    } else {
+      state.status = "playing";
+    }
+  }
+  window.addEventListener("keydown", pauseGame);
+
   return new Promise((resolve) => {
     runAnimation((time) => {
+      if (state.status == "paused") {
+        return true;
+      }
       state = state.update(time, arrowKeys);
       display.syncState(state);
       if (state.status == "playing") {
         return true;
       } else if (ending > 0) {
+        window.removeEventListener("keydown", pauseGame);
         ending -= time;
         return true;
       } else {
+        window.removeEventListener("keydown", pauseGame);
         display.clear();
         resolve(state.status);
         return false;
