@@ -155,6 +155,62 @@
     cx12.lineWidth = 3;
     cx12.stroke();
   </script>
+  <canvas class="canvas13"></canvas>
+  <script>
+    let cx13 = document.querySelector(".canvas13").getContext("2d");
+    cx13.scale(1, -1);
+    cx13.strokeStyle = "blue";
+    cx13.strokeRect(100, -50, 50, -50);
+  </script>
+  <canvas class="canvas14"></canvas>
+  <script>
+    let cx14 = document.querySelector(".canvas14").getContext("2d");
+    cx14.translate(50, 50);
+    cx14.rotate(0.4 * Math.PI);
+    cx14.strokeStyle = "blue";
+    cx14.strokeRect(0, 0, 50, 50);
+  </script>
+  <canvas class="canvas15"></canvas>
+  <script>
+    let cx15 = document.querySelector(".canvas15").getContext("2d");
+    cx15.strokeStyle = "blue";
+    cx15.translate(50, 50);
+    cx15.rotate(0.1 * Math.PI);
+    cx15.strokeRect(1, 1, 50, 50);
+  </script>
+  <canvas class="canvas16"></canvas>
+  <script>
+    let cx16 = document.querySelector(".canvas16").getContext("2d");
+    function flipHorizontally(context, around) {
+      context.translate(around, 0);
+      context.scale(-1, 1);
+      context.translate(-around, 0);
+    }
+    let img16 = document.createElement("img");
+    img16.src = "./assets/player.png";
+    let spriteW2 = 24, spriteH2 = 30; img16.addEventListener("load", () => {
+      flipHorizontally(cx16, 100 + spriteW2 / 2);
+      cx16.drawImage(img16, 0, 0, spriteW2, spriteH2,
+        100, 0, spriteW2, spriteH2);
+    });
+  </script>
+  <canvas class="canvas17" width="600" height="300"></canvas>
+  <script>
+    let cx17 = document.querySelector(".canvas17").getContext("2d");
+    function branch(length, alpha, scale) {
+     cx17.fillRect(0, 0, 1, length);
+     if (length < 8) return;
+     cx17.save();
+     cx17.translate(0, length);
+     cx17.rotate(-alpha);
+     branch(length * scale, alpha, scale);
+     cx17.rotate(2 * alpha);
+     branch(length * scale, alpha, scale);
+     cx17.restore();
+   }
+   cx17.translate(300, 0);
+   branch(60, 0.5, 0.8);
+  </script>
 </body>
 
 </html>
