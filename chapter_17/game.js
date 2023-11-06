@@ -138,7 +138,7 @@ const levelChars = {
   "=": Lava,
   "|": Lava,
   v: Lava,
-  "m": Monster,
+  m: Monster,
 };
 
 function elt(name, attrs, ...children) {
@@ -275,7 +275,7 @@ function overlap(actor1, actor2) {
   );
 }
 
-Monster.prototype.collide = function(state) {
+Monster.prototype.collide = function (state) {
   console.log("Touched monster");
   let player = state.actors.filter((actor) => actor.type == "player");
   let monster = state.actors.filter((actor) => actor == this);
@@ -289,9 +289,9 @@ Monster.prototype.collide = function(state) {
     const filtered = state.actors.filter((actor) => actor != this);
     return new State(state.level, filtered, state.status);
   }
-  
+
   return new State(state.level, state.actors, "lost");
-}
+};
 
 Lava.prototype.collide = function (state) {
   return new State(state.level, state.actors, "lost");
@@ -322,7 +322,7 @@ Monster.prototype.update = function (time, state) {
   } else {
     return new Monster(this.pos, this.speed.times(-1));
   }
-}
+};
 
 const wobbleSpeed = 8;
 const wobbleDist = 0.07;
@@ -362,7 +362,8 @@ Player.prototype.update = function (time, state, keys) {
   return new Player(pos, new Vec(xSpeed, ySpeed));
 };
 
-function trackKeys(keys, disable) {let down = Object.create(null);
+function trackKeys(keys, disable) {
+  let down = Object.create(null);
   function track(event) {
     if (keys.includes(event.key)) {
       down[event.key] = event.type == "keydown";
@@ -374,7 +375,7 @@ function trackKeys(keys, disable) {let down = Object.create(null);
     window.removeEventListener("keydown", track);
     window.removeEventListener("keyup", track);
     console.log("Keys disabled");
-  }
+  };
 
   window.addEventListener("keydown", track);
   window.addEventListener("keyup", track);
@@ -455,3 +456,69 @@ async function runGame(plans, Display) {
   }
   console.log("You've won!");
 }
+
+class CanvasDisplay {
+  constructor(parent, level) {
+    this.canvas = document.createElement("canvas");
+    this.canvas = document.createElement("canvas");
+    this.canvas.width = Math.min(600, level.width * scale);
+    this.canvas.height = Math.min(450, level.height * scale);
+    parent.appendChild(this.canvas);
+    this.cx = this.canvas.getContext("2d");
+
+    this.flipPlayer = false;
+
+    this.viewport = {
+      left: 0,
+      top: 0,
+      width: this.canvas.width / scale,
+      height: this.canvas.height / scale,
+    };
+  }
+
+  clear() {
+    this.canvas.remove();
+  }
+}
+
+CanvasDisplay.prototype.syncState = function (state) {
+  this.updateViewport(state);
+  this.clearDisplay(state.status);
+  this.drawBackGround(state.level);
+  this.drawActors(state.actors);
+};
+
+CanvasDisplay.prototype.updateViewport = function (state) {
+  let view = this.viewport,
+    margin = view.width / 3;
+  let player = state.player;
+  let center = player.pos.plus(player.size.times(0.5));
+
+  if (center.x < view.left + margin) {
+    view.left = Math.max(center.x - margin, 0);
+  } else if (center.x > view.left + view.width - margin) {
+    view.left = Math.min(
+      center.x + margin - view.width,
+      state.level.width - view.width
+    );
+  }
+  if (center.y < view.top + margin) {
+    view.top = Math.max(center.y - margin, 0);
+  } else if (center.y > view.top + view.height - margin) {
+    view.top = Math.min(
+      center.y + margin - view.height,
+      state.level.height - view.height
+    );
+  }
+};
+
+CanvasDisplay.prototype.clearDisplay = function (status) {
+  if (status == "won") {
+    this.cx.fillStyle = "rgb(68, 191, 255)";
+  } else if (status == "lost") {
+    this.cx.fillStyle = "rgb(44, 146, 214)";
+  } else {
+    this.cx.fillStyle = "rgb(52, 166, 251)";
+  }
+  this.cx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+};
