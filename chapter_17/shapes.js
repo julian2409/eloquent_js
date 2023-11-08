@@ -14,6 +14,30 @@ function drawTrapezoid(x, y) {
   cx.restore();
 }
 
+function drawDiamond(x, y) {
+  cx.save();
+  cx.translate(x, y);
+  cx.translate(25, 25);
+  cx.rotate(Math.PI / 4);
+  cx.fillStyle = "red";
+  cx.fillRect(-25, -25, 50, 50);
+  cx.restore();
+}
+
+function zigzag(x, y) {
+  cx.save();
+  cx.translate(x, y);
+  const width = 75;
+  let nextX = width;
+  cx.moveTo(0, 0);
+  for (let y = 2.5; y < 80; y = y + 5, nextX = nextX + 75) {
+    cx.lineTo(nextX % (width*2), y);
+  }
+  cx.restore();
+}
+
 drawTrapezoid(5, 5);
+drawDiamond(150, 20);
+zigzag(250, 5);
 
 cx.stroke();
