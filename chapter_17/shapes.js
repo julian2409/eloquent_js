@@ -36,8 +36,20 @@ function zigzag(x, y) {
   cx.restore();
 }
 
+function spiral(x, y) {
+  cx.save();
+  cx.translate(x, y);
+  cx.moveTo(50, 50);
+  const increment = (6 * Math.PI) / 100;
+  for (let i = 0; i < 100; i++) {
+    console.log(increment);
+  }
+  cx.restore();
+}
+
 drawTrapezoid(5, 5);
 drawDiamond(150, 20);
 zigzag(250, 5);
+spiral(5, 150);
 
 cx.stroke();
