@@ -37,16 +37,42 @@ function zigzag(x, y) {
 }
 
 function spiral(x, y) {
+  let step = (Math.PI * 6) / 100;
+
+  cx.save();
   cx.translate(x, y);
-  let increment = (6 * Math.PI) / 100;
-  for (let i = 0; i < 100; i = i + 1) {
-    if (i % 30 == 0) {
-      cx.beginPath();
-      cx.arc(50, 0, 3 + increment * i, 0, Math.PI * 2);
-      cx.closePath();
-      cx.stroke();
-    }
+  cx.beginPath();
+  cx.moveTo(0, 0);
+  for (let i = 0; i < 100; i++) {
+    cx.lineTo(Math.cos(step * i) * i / 2, Math.sin(step * i) * i / 2);
   }
+  cx.stroke();
+  cx.restore();
+}
+
+function sun(x, y) {
+  const radius = 50;
+
+  cx.save();
+  cx.translate(x, y);
+  cx.beginPath();
+  cx.moveTo(0, 0);
+  cx.fillStyle = "orange";
+  cx.ellipse(0, 0, radius, radius, 1, 0, Math.PI * 2);
+  cx.fill();
+
+  let lowAngle = -(Math.PI / 2);
+  let highAngle = lowAngle + Math.PI / 4;
+  for (let i = 0; i < 8; i++) {
+    cx.strokeStyle = "black";
+    cx.beginPath();
+    cx.moveTo(Math.cos(lowAngle) * radius, Math.sin(lowAngle) * radius);
+    cx.quadraticCurveTo(0, 0, Math.cos(highAngle) * radius, Math.sin(highAngle) * radius);
+    cx.stroke();
+    lowAngle += Math.PI / 4;
+    highAngle += Math.PI / 4;
+  }
+
   cx.restore();
 }
 
@@ -55,4 +81,6 @@ drawTrapezoid(5, 5);
 drawDiamond(150, 20);
 zigzag(250, 5);
 cx.stroke();
-spiral(50, 200);
+spiral(100, 200);
+sun(300, 200);
+
