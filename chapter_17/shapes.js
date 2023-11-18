@@ -64,10 +64,13 @@ function sun(x, y) {
   let lowAngle = -(Math.PI / 2);
   let highAngle = lowAngle + Math.PI / 4;
   for (let i = 0; i < 8; i++) {
-    cx.strokeStyle = "black";
+    cx.strokeStyle = "white";
     cx.beginPath();
-    cx.moveTo(Math.cos(lowAngle) * radius, Math.sin(lowAngle) * radius);
-    cx.quadraticCurveTo(0, 0, Math.cos(highAngle) * radius, Math.sin(highAngle) * radius);
+    cx.moveTo(Math.cos(lowAngle) * radius * 1.1, Math.sin(lowAngle) * radius  * 1.1);
+    cx.quadraticCurveTo(0, 0, Math.cos(highAngle) * radius  * 1.1, Math.sin(highAngle) * radius  * 1.1);
+    cx.closePath();
+    cx.fillStyle = "white";
+    cx.fill();
     cx.stroke();
     lowAngle += Math.PI / 4;
     highAngle += Math.PI / 4;
