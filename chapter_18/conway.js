@@ -1,6 +1,6 @@
 "use strict";
 
-const currentFieldArray = [];
+let currentFieldArray = [];
 const stateArray = [];
 const fieldDiv = document.querySelector("div");
 let tick = 0;
@@ -12,6 +12,7 @@ const seedFields = function(aliveRatio = 4) {
 };
 
 seedFields();
+stateArray[tick] = currentFieldArray;
 
 function createField(i) {
   const field = document.createElement("input");
@@ -31,11 +32,51 @@ for (let i = 0; i < 100; i++) {
 }
 
 function checkNeighbors(i) {
+  let countLiving = 0;
+  // left
+  if (i % 10 > 0 && currentFieldArray[i-1]) {
+    countLiving++;
+  }
+  // right
+  if (i % 10 < 9 && currentFieldArray[i+1]) {
+    countLiving++;
+  }
+  // top
+  if (i > 9 && currentFieldArray[i-10]) {
+    countLiving++;
+  }
+  // bottom
+  if (i < 90 && currentFieldArray[i+10]) {
+    countLiving++;
+  }
+  // top left
+  if (i > 9 && currentFieldArray[i-10] && i % 10 > 0 && currentFieldArray[i-1]) {
+    countLiving++;
+  }
+  // top right
+  if (i > 9 && currentFieldArray[i-10] && i % 10 < 9 && currentFieldArray[i+1]) {
+    countLiving++;
+  }
+  // bottom left
+  if (i < 90 && currentFieldArray[i+10] && i % 10 > 0 && currentFieldArray[i-1]) {
+    countLiving++;
+  }
+  // bottom right
+  if (i < 90 && currentFieldArray[i+10] && i % 10 < 9 && currentFieldArray[i+1]) {
+    countLiving++;
+  }
 
+  return countLiving;
 }
 
 function advanceGeneration() {
+  for (let i = 0; i < 100; i++) {
+    
+  }
+  currentFieldArray = [];
 
+  tick++;
+  stateArray[tick];
 }
 
 function stepBack() {
