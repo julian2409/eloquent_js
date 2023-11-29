@@ -70,17 +70,31 @@ function checkNeighbors(i) {
 }
 
 function advanceGeneration() {
+  let newState = [];
+
   for (let i = 0; i < 100; i++) {
-    
+    let livingNeighbors = checkNeighbors(i);
+    if (livingNeighbors !== 3) {
+      newState[i] = false;
+    } else {
+      newState[i] = true;
+    }
   }
-  currentFieldArray = [];
-
   tick++;
-  stateArray[tick];
+  stateArray[tick] = newState;
+
+  for (let i = 0; i < 100; i++) {
+    draw(i);
+  }
+
+  currentFieldArray = [];
 }
 
-function stepBack() {
-
+function draw(i) {
+  let currentRadioButton = document.querySelector(`#field-${i}`);
+  currentRadioButton.checked = currentFieldArray[i];
 }
 
-console.log(currentFieldArray);
+const nextButton = document.querySelector("#nextGen");
+const prevButton = document.querySelector("#previousGen");
+nextButton.addEventListener("click", advanceGeneration);
