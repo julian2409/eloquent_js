@@ -50,19 +50,19 @@ function checkNeighbors(i) {
     countLiving++;
   }
   // top left
-  if (i > 9 && currentFieldArray[i-10] && i % 10 > 0 && currentFieldArray[i-1]) {
+  if (i > 9 && currentFieldArray[i-11] && i % 10 > 0) {
     countLiving++;
   }
   // top right
-  if (i > 9 && currentFieldArray[i-10] && i % 10 < 9 && currentFieldArray[i+1]) {
+  if (i > 9 && currentFieldArray[i-9] && i % 10 < 9) {
     countLiving++;
   }
   // bottom left
-  if (i < 90 && currentFieldArray[i+10] && i % 10 > 0 && currentFieldArray[i-1]) {
+  if (i < 90 && currentFieldArray[i+11] && i % 10 > 0) {
     countLiving++;
   }
   // bottom right
-  if (i < 90 && currentFieldArray[i+10] && i % 10 < 9 && currentFieldArray[i+1]) {
+  if (i < 90 && currentFieldArray[i+9] && i % 10 < 9) {
     countLiving++;
   }
 
@@ -74,12 +74,16 @@ function advanceGeneration() {
 
   for (let i = 0; i < 100; i++) {
     let livingNeighbors = checkNeighbors(i);
-    if (livingNeighbors !== 3) {
-      newState[i] = false;
-    } else {
+
+    if (currentFieldArray[i] && (livingNeighbors == 2 || livingNeighbors == 3)) {
       newState[i] = true;
+    } else if (!currentFieldArray[i] && livingNeighbors == 3) {
+      newState[i] = true;
+    } else {
+      newState[i] = false;
     }
   }
+  
   tick++;
   stateArray[tick] = newState;
 
@@ -87,12 +91,12 @@ function advanceGeneration() {
     draw(i);
   }
 
-  currentFieldArray = [];
+  currentFieldArray = newState;
 }
 
 function draw(i) {
   let currentRadioButton = document.querySelector(`#field-${i}`);
-  currentRadioButton.checked = currentFieldArray[i];
+  currentRadioButton.checked = stateArray[tick][i];
 }
 
 const nextButton = document.querySelector("#nextGen");
