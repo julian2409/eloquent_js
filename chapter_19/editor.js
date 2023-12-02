@@ -62,6 +62,7 @@ class PictureCanvas {
 function drawPicture(picture, canvas, scale) {
   canvas.width = picture.width * scale;
   canvas.height = picture.height * scale;
+  
   /** @type {CanvasRenderingContext2D} */
   let cx = canvas.getContext("2d");
 
@@ -96,4 +97,77 @@ function pointerPosition(pos, domNode) {
     x: Math.floor((pos.clientX - rect.left) / scale),
     y: Math.floor((pos.clientY - rect.top) / scale),
   };
+}
+
+PictureCanvas.prototype.touch = function (startEvent, onDown) {
+  let pos = pointerPosition(startEvent, touches[0], this.dom);
+  let onMove = onDown(pos);
+  startEvent.preventDefault();
+  if (!onMove) return;
+  let move = (moveEvent) => {
+    let newPos = pointerPosition(moveEvent.touches[0], this.dom);
+    if (newPos.x == pos.x && newPos.y == pos.y) return;
+    pos = newPos;
+    onMove(newPos);
+  };
+  let end = () => {
+    this.dom.removeEventListener("touchmove", move);
+    this.dom.removeEventListener("touchend", end);
+  };
+  this.dom.addEventListener("touchmove", move);
+  this.dom.addEventListener("touchend", end);
+};
+
+class PixelEditor {
+  constructor(state, config) {
+    let { tools, controls, dispatch } = config;
+    this.state = state;
+
+    this.canvas = new PictureCanvas(state.picture, (pos) => {
+      let tool = tools[this.state.tool];
+      let onMove = tool(pos, this.state, dispatch);
+      if (onMove) return pos => onMove(pos, this.state);
+    });
+    this.controls = controls.map(Control => new Control(state, config));
+    this.dom = elt(
+      "div",
+      {},
+      this.canvas.dom,
+      elt("br"),
+      ...this.controls.reduce((a, c) => a.concat(" ", c.dom), [])
+    );
+  }
+  syncState(state) {
+    this.state = state;
+    this.canvas.syncState(state.picture);
+    for (let ctrl of this.controls) ctrl.syncState(state);
+  }
+}
+
+class ToolSelect {
+  constructor(state, {tools, dispatch}) {
+    this.select = elt("select", {
+      onchange: () => dispatch({tool: this.select.value})
+    }, ...Object.keys(tools).map(name => elt("option", {
+      selected: name == state.tool
+    }, name)));
+    this.dom = elt("label", null, "🖌 Tool: ", this.select);
+  }
+  syncState(state) {
+    this.select.value = state.tool;
+  }
+}
+
+class ColorSelect {
+  constructor(state, {dispatch}) {
+    this.input = elt("input", {
+      type: "color",
+      value: state.color,
+      onchange: () => dispatch({color: this.input.value})
+    });
+    this.dom = elt("label", null, "🎨 Color: ", this.input);
+  }
+  syncState(state) {
+    this.input.value = state.color;
+  }
 }
